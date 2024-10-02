@@ -8,14 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+
     - uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         config: ${{ secrets.SSH_CONFIG }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
-    - name: deployer
-      env:
-        pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
+
+    - name: Deploy to Pantheon
       run: |
-        git remote add pantheon $pantheon_repo
+        # Add the Pantheon remote
+        git remote add pantheon ${{ secrets.PANTHEON_REPO }}
+
+        # Push the changes to Pantheon
         git push pantheon HEAD:master
